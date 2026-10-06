@@ -1,240 +1,225 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TrendScale Media</title>
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent: #38bdf8;
-            --text: #f8fafc;
-            --text-muted: #94a3b8;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #334155;
-        }
-
-        .btn-dashboard {
-            background-color: var(--accent);
-            color: #0f172a;
-            border: none;
-            padding: 10px 18px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        /* Horizontal Categories Bar */
-        .categories-bar {
-            display: flex;
-            gap: 15px;
-            overflow-x: auto;
-            padding: 15px 0;
-            white-space: nowrap;
-            border-bottom: 1px solid #334155;
-            margin-bottom: 25px;
-        }
-
-        .category-item {
-            font-size: 1rem;
-            color: var(--text-muted);
-            text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .category-item:hover, .category-item.active {
-            background-color: #334155;
-            color: var(--text);
-        }
-
-        /* Article & Digital Product Cards (No Price Displayed Initially) */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            padding: 15px;
-            cursor: pointer;
-            border: 1px solid transparent;
-            transition: border-color 0.2s;
-        }
-
-        .card:hover {
-            border-color: var(--accent);
-        }
-
-        .card-tag {
-            font-size: 0.8rem;
-            color: var(--accent);
-            text-transform: uppercase;
-        }
-
-        .card-title {
-            margin: 10px 0 5px 0;
-            font-size: 1.2rem;
-        }
-
-        .card-teaser {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        /* Modal Overlays */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.75);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 10px;
-            max-width: 500px;
-            width: 90%;
-            position: relative;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: var(--text-muted);
-        }
-
-        .btn-buy {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background-color: #22c55e;
-            color: white;
-            text-align: center;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: bold;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrendScale Media | High-Value Market Intelligence & Digital Assets</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body{background:#07090e;color:#f3f4f6;font-family:'Inter',sans-serif;overflow-x:hidden}
+.mono{font-family:'JetBrains Mono',monospace}
+.glass-panel{background:rgba(15,20,31,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08)}
+.glass-card{background:rgba(15,20,31,.6);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.06);transition:all .3s}
+.glass-card:hover{transform:translateY(-4px);border-color:rgba(99,102,241,.4);box-shadow:0 12px 30px -10px rgba(99,102,241,.25)}
+.gt{background:linear-gradient(135deg,#a855f7,#6366f1 50%,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
+.hidden-x{display:none!important}
+.cat-on{background:rgba(79,70,229,.3)!important;color:#a5b4fc!important;border-color:rgba(99,102,241,.4)!important}
+input,select{background:#07090e;border:1px solid #1f293d;border-radius:10px;padding:10px 12px;width:100%;font-size:14px;color:#fff}
+input:focus,select:focus{outline:none;border-color:#6366f1}
+</style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col antialiased">
 
-    <header>
-        <h1>TrendScale Media</h1>
-        <button id="openDashboardBtn" class="btn-dashboard">Founders Dashboard</button>
-    </header>
+<header class="sticky top-0 z-40 w-full glass-panel border-b border-gray-800/60 px-4 lg:px-8 py-3.5">
+ <div class="max-w-7xl mx-auto flex items-center justify-between">
+  <a href="#" class="flex items-center gap-3">
+   <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-emerald-500 p-[1.5px]"><div class="w-full h-full bg-[#07090e] rounded-[10px] flex items-center justify-center text-lg">⚡</div></div>
+   <div><span class="text-xl font-extrabold text-white flex items-center gap-1.5">TrendScale <span class="text-indigo-400 text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/30">MEDIA</span></span>
+   <span class="block text-[10px] mono text-gray-400 tracking-wider">AUTONOMOUS MEDIA & ASSETS ENGINE</span></div>
+  </a>
+  <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+   <a href="#digital-assets" class="hover:text-white"><i class="fa-solid fa-cube text-xs text-indigo-400"></i> Digital Assets</a>
+   <a href="#enterprise" class="hover:text-white"><i class="fa-solid fa-file-invoice-dollar text-xs text-emerald-400"></i> High-Ticket</a>
+   <a href="#articles" class="hover:text-white"><i class="fa-solid fa-newspaper text-xs text-purple-400"></i> Intent Articles</a>
+   <a href="#about" class="hover:text-white">About System</a>
+   <button onclick="openLegal('contact')" class="hover:text-white">Contact Us</button>
+  </nav>
+  <button onclick="openDash()" class="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 active:scale-95 flex items-center gap-2 border border-indigo-400/30">
+   <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span><i class="fa-solid fa-sliders"></i><span>Founder Dashboard</span>
+  </button>
+ </div>
+</header>
 
-    <!-- Horizontal Category Bar -->
-    <nav class="categories-bar">
-        <span class="category-item active">All Items</span>
-        <span class="category-item">Articles</span>
-        <span class="category-item">Templates</span>
-        <span class="category-item">Business Articles</span>
-        <span class="category-item">Digital Products</span>
-    </nav>
+<section class="relative pt-12 pb-10 px-4 lg:px-8 max-w-7xl mx-auto text-center overflow-hidden">
+ <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-indigo-600/15 rounded-full blur-[120px] pointer-events-none"></div>
+ <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs mono mb-6">
+  <i class="fa-solid fa-robot text-indigo-400"></i><span>Autonomous Buyer-Intent Scanning & Product Store</span><span class="text-emerald-400">Live Gemini Search Grounding</span>
+ </div>
+ <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-tight max-w-4xl mx-auto mb-6">High-Value Market Intelligence & <span class="gt">Instant Digital Assets</span></h1>
+ <p class="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed mb-8">Engineered for high-intent builders and global founders. Access production-ready automation scripts, high-ticket fintech intelligence reports, and AI-curated market breakdowns.</p>
+ <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto pt-4 border-t border-gray-800/60">
+  <div class="p-3 glass-panel rounded-xl"><span class="text-2xl font-bold mono text-emerald-400">KES / USD</span><span class="block text-xs text-gray-400 mt-1">Dual M-Pesa & Card Checkout</span></div>
+  <div class="p-3 glass-panel rounded-xl"><span class="text-2xl font-bold mono text-indigo-400">2.4x</span><span class="block text-xs text-gray-400 mt-1">Commercial Buyer-Intent Mining</span></div>
+  <div class="p-3 glass-panel rounded-xl"><span class="text-2xl font-bold mono text-purple-400">&lt; 1 sec</span><span class="block text-xs text-gray-400 mt-1">Instant Script Delivery</span></div>
+  <div class="p-3 glass-panel rounded-xl"><span class="text-2xl font-bold mono text-cyan-400">100%</span><span class="block text-xs text-gray-400 mt-1">Production Tested Systems</span></div>
+ </div>
+</section>
 
-    <!-- Content Feed (Prices Hidden) -->
-    <div class="grid">
-        <div class="card" onclick="openProductModal('High-Class Startup Blueprint', 'Articles', 'Learn the exact framework used by top founders to scale digital assets reliably.', '$49.00')">
-            <span class="card-tag">Articles</span>
-            <h3 class="card-title">High-Class Startup Blueprint</h3>
-            <p class="card-teaser">Learn the exact framework used by top founders to scale digital assets reliably...</p>
-        </div>
+<section class="max-w-7xl w-full mx-auto px-4 lg:px-8 my-6">
+ <div id="cats" class="glass-panel rounded-2xl p-2.5 flex items-center gap-3 overflow-x-auto no-scrollbar text-sm font-medium"></div>
+</section>
 
-        <div class="card" onclick="openProductModal('E-Commerce Growth Kit', 'Templates', 'A complete set of high-converting landing page templates and analytics scripts.', '$29.00')">
-            <span class="card-tag">Templates</span>
-            <h3 class="card-title">E-Commerce Growth Kit</h3>
-            <p class="card-teaser">A complete set of high-converting landing page templates and analytics scripts...</p>
-        </div>
+<main class="flex-1">
+ <section id="digital-assets" class="store-section py-8 px-4 lg:px-8 max-w-7xl mx-auto">
+  <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4 border-b border-gray-800 pb-4">
+   <div><span class="text-xs mono font-bold tracking-widest text-indigo-400">STORE SECTION 01</span>
+   <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1"><i class="fa-solid fa-box-archive text-indigo-500"></i> High-Demand Digital Assets</h2></div>
+   <span class="text-xs text-gray-400 mono">Select any item to read teaser & view unlock options</span>
+  </div>
+  <div id="assets-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+ </section>
+
+ <section id="enterprise" class="store-section py-8 px-4 lg:px-8 max-w-7xl mx-auto">
+  <div class="glass-panel rounded-3xl p-8 sm:p-10 border border-indigo-500/30 relative overflow-hidden bg-gradient-to-br from-[#0f141f] via-[#0b0e17] to-[#121826]">
+   <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+    <div class="lg:col-span-8">
+     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs mono mb-4"><i class="fa-solid fa-award"></i> FEATURED ENTERPRISE INTELLIGENCE REPORT</div>
+     <h2 class="text-2xl sm:text-4xl font-extrabold text-white mb-4 leading-tight">2026 African Cross-Border Fintech & M-Pesa Monetization Manual</h2>
+     <p class="text-gray-300 mb-6 leading-relaxed">A 120-page deep-dive blueprint detailing cross-border remittance architecture, Daraja 2.0 API optimization, and unit economics for scaling SaaS solutions across Kenya, Nigeria, and South Africa.</p>
+     <div class="flex flex-wrap gap-4 text-xs text-gray-400 mono">
+      <span><i class="fa-solid fa-check text-emerald-400"></i> Includes PDF Manual</span>
+      <span><i class="fa-solid fa-check text-emerald-400"></i> Code Samples (.ts / .py)</span>
+      <span><i class="fa-solid fa-check text-emerald-400"></i> Founder Q&A Channel</span>
+     </div>
     </div>
-
-    <!-- Founders Dashboard Modal -->
-    <div id="dashboardModal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-btn" id="closeDashboardBtn">&times;</span>
-            <h2>Founders Dashboard</h2>
-            <p>Welcome to the Founder's Portal. Manage your products, analytics, and business content here.</p>
-        </div>
+    <div class="lg:col-span-4 glass-card p-6 rounded-2xl border border-indigo-500/20 text-center">
+     <span class="text-xs text-gray-400 mono uppercase tracking-wider block mb-2">Institutional Report Preview</span>
+     <p class="text-xs text-gray-400 mb-6">Tap below to view the executive summary, contents, and pricing options.</p>
+     <button onclick="openItem('report')" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-sm font-semibold active:scale-95">View Report & Unlock</button>
     </div>
+   </div>
+  </div>
+ </section>
 
-    <!-- Article / Digital Product Detail Modal -->
-    <div id="productModal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-btn" id="closeProductBtn">&times;</span>
-            <span id="modalTag" class="card-tag"></span>
-            <h2 id="modalTitle"></h2>
-            <p id="modalTeaser" style="line-height: 1.5; color: var(--text-muted);"></p>
-            <hr style="border-color: #334155; margin: 20px 0;">
-            <button id="modalBuyBtn" class="btn-buy">Buy Product</button>
-        </div>
-    </div>
+ <section id="articles" class="store-section py-8 px-4 lg:px-8 max-w-7xl mx-auto">
+  <div class="mb-8 border-b border-gray-800 pb-4">
+   <span class="text-xs mono font-bold tracking-widest text-purple-400">STORE SECTION 02</span>
+   <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1"><i class="fa-solid fa-newspaper text-purple-500"></i> Buyer-Intent Articles</h2>
+  </div>
+  <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+ </section>
 
-    <script>
-        // Founders Dashboard Logic
-        const dashboardModal = document.getElementById('dashboardModal');
-        const openDashboardBtn = document.getElementById('openDashboardBtn');
-        const closeDashboardBtn = document.getElementById('closeDashboardBtn');
+ <section id="about" class="py-8 px-4 lg:px-8 max-w-4xl mx-auto text-center">
+  <h2 class="text-2xl font-bold text-white mb-3">About the System</h2>
+  <p class="text-gray-400 text-sm leading-relaxed">TrendScale Media pairs market intelligence with instant digital asset delivery. For every 5 educational, high-intent articles we publish 2 premium assets, so you can read the breakdown and then buy the finished script, template, or report to execute immediately.</p>
+ </section>
+</main>
 
-        openDashboardBtn.addEventListener('click', () => {
-            dashboardModal.style.display = 'flex';
-        });
+<footer class="border-t border-gray-800 mt-8 py-8 px-4 text-center text-xs text-gray-500">
+ <div class="flex justify-center gap-6 mb-3">
+  <button onclick="openLegal('privacy')" class="hover:text-white">Privacy</button>
+  <button onclick="openLegal('terms')" class="hover:text-white">Terms</button>
+  <button onclick="openLegal('refund')" class="hover:text-white">Refunds</button>
+  <button onclick="openLegal('contact')" class="hover:text-white">Contact</button>
+ </div>
+ © 2026 TrendScale Media. All rights reserved.
+</footer>
 
-        closeDashboardBtn.addEventListener('click', () => {
-            dashboardModal.style.display = 'none';
-        });
+<div id="modal" class="hidden-x fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-sm" onclick="if(event.target===this)closeModal()">
+ <div class="glass-panel bg-[#0b0e17] w-full sm:max-w-xl max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-6 border border-indigo-500/30 relative">
+  <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800 text-gray-300 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+  <div id="modal-body"></div>
+ </div>
+</div>
 
-        // Product Modal Logic
-        const productModal = document.getElementById('productModal');
-        const closeProductBtn = document.getElementById('closeProductBtn');
+<script>
+const ITEMS={
+ a1:{cat:'digital-assets templates',tag:'Node.js / Express',color:'emerald',title:'Paystack M-Pesa Auto-Settlement Script',price:2500,cur:'KES',type:'Code Blueprint (.zip)',
+  desc:'Full production Node.js express webhook handler with automatic transaction reconciliation, M-Pesa STK push retry queues, and Slack alert webhooks.',
+  list:['Express webhook handler with signature verification','Auto-reconciliation of Paystack transactions','STK push retry queue','Slack alert webhooks']},
+ a2:{cat:'digital-assets templates',tag:'Notion OS',color:'indigo',title:'2026 Micro-SaaS Financial OS',price:1200,cur:'KES',type:'Notion Template Link',
+  desc:'Comprehensive Notion workspace built for indie hackers: MRR tracking, churn analytics, server cost forecasting, and multi-currency tax export.',
+  list:['MRR & churn dashboards','Server cost forecasting','Multi-currency tax export']},
+ a3:{cat:'digital-assets templates',tag:'Python / AI',color:'purple',title:'Viral YouTube Short-Form Automation Pack',price:1500,cur:'KES',type:'Python Source Code (.zip)',
+  desc:'Python script suite that hooks into Whisper API and FFmpeg to auto-generate styled captions, viral background music cuts, and automated upload queues.',
+  list:['Whisper-powered styled captions','FFmpeg music & cut automation','Upload queue scheduler']},
+ report:{cat:'enterprise',title:'2026 African Cross-Border Fintech & M-Pesa Monetization Manual',price:4500,cur:'KES',type:'PDF Manual + Code Samples',
+  desc:'A 120-page blueprint covering cross-border remittance architecture, Daraja 2.0 API optimization, and unit economics for scaling SaaS across Kenya, Nigeria, and South Africa.',
+  list:['120-page PDF manual','TypeScript & Python code samples','Founder Q&A channel access']},
+ r1:{cat:'articles',article:1,tag:'Fintech',color:'emerald',title:'How to Automate Paystack M-Pesa Reconciliation in 2026',price:500,cur:'KES',type:'Full Article Access',
+  desc:'Why manual reconciliation costs African startups hours every week, and the webhook pattern that removes it.',
+  free:'Most Kenyan startups reconcile M-Pesa payments by hand. Each payment fires a webhook event, and the core idea is to treat that event as the single source of truth and match it against your own order records by reference.',
+  locked:'Full article: idempotent webhook handling, signature checks, retry strategy, and a reconciliation report template.'},
+ r2:{cat:'articles',article:1,tag:'SaaS',color:'indigo',title:'Micro-SaaS Financial Tracking: What to Measure First',price:500,cur:'KES',type:'Full Article Access',
+  desc:'The 5 numbers every indie hacker should track before worrying about anything else.',
+  free:'Early-stage founders drown in metrics. Start with MRR, churn, CAC payback, runway and gross margin, and ignore the rest until those five are stable.',
+  locked:'Full article: formulas, a tracking cadence, and common mistakes in multi-currency reporting.'},
+ r3:{cat:'articles',article:1,tag:'Automation',color:'purple',title:'Automating Short-Form Video Captions with Whisper',price:500,cur:'KES',type:'Full Article Access',
+  desc:'A practical pipeline from raw clip to styled captions without manual editing.',
+  free:'Speech-to-text has become cheap enough to automate end to end. The pipeline is: extract audio, transcribe with word-level timestamps, group words into caption chunks, then burn them in with FFmpeg.',
+  locked:'Full article: chunking rules, styling presets, and batch processing tips.'}
+};
+const CATS=[['all','All Products & Articles'],['digital-assets','Digital Assets'],['enterprise','High-Ticket Reports'],['templates','Templates & Code'],['articles','Intent Articles']];
+const LEGAL={
+ contact:['Contact Us','<p>Questions about an order or asset? Email <b>support@trendscale.media</b>.</p>'],
+ privacy:['Privacy Policy','<p>We collect only your email and payment reference to deliver your purchase. Payments are processed by Paystack; we never see your card or M-Pesa PIN.</p>'],
+ terms:['Terms of Service','<p>All digital products are licensed for your own use and may not be resold or redistributed.</p>'],
+ refund:['Refund Policy','<p>Because digital assets are delivered instantly, sales are final. If an asset is defective, contact us within 7 days.</p>']
+};
+const $=id=>document.getElementById(id);
+const store=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k)||'';localStorage.setItem(k,v)}catch(e){return ''}};
+const money=(c,p)=>(c==='KES'?'KES ':'$')+p.toLocaleString();
 
-        function openProductModal(title, category, teaser, price) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalTag').innerText = category;
-            document.getElementById('modalTeaser').innerText = teaser;
-            document.getElementById('modalBuyBtn').innerText = `Buy Now — ${price}`;
-            productModal.style.display = 'flex';
-        }
+function card(id,i){
+ return `<div onclick="openItem('${id}')" data-cat="${i.cat}" class="item-card glass-card rounded-2xl p-6 flex flex-col justify-between relative group cursor-pointer overflow-hidden">
+ <div><div class="flex items-center justify-between mb-4">
+ <span class="px-2.5 py-1 rounded-md bg-${i.color}-500/10 text-${i.color}-400 border border-${i.color}-500/30 text-xs mono font-semibold">${i.tag}</span>
+ <span class="text-xs mono text-gray-500"><i class="fa-solid fa-lock text-[10px]"></i> Locked</span></div>
+ <h3 class="text-lg font-bold text-white mb-2 group-hover:text-indigo-300">${i.title}</h3>
+ <p class="text-sm text-gray-400 mb-6">${i.desc}</p></div>
+ <div class="pt-4 border-t border-gray-800/80 flex items-center justify-between text-xs mono text-indigo-400"><span>${i.article?'Read Article':'Read Teaser & Unlock'}</span><i class="fa-solid fa-arrow-right"></i></div></div>`;
+}
+function render(){
+ $('cats').innerHTML=CATS.map(([k,l])=>`<button data-k="${k}" onclick="filterCategory('${k}')" class="cat-btn px-4 py-2 rounded-xl bg-gray-900/60 text-gray-300 hover:text-white border border-gray-800 whitespace-nowrap">${l}</button>`).join('');
+ $('assets-grid').innerHTML=Object.entries(ITEMS).filter(([k])=>k[0]==='a').map(([k,i])=>card(k,i)).join('');
+ $('articles-grid').innerHTML=Object.entries(ITEMS).filter(([k,i])=>i.article).map(([k,i])=>card(k,i)).join('');
+ filterCategory('all');
+}
+function filterCategory(c){
+ document.querySelectorAll('.cat-btn').forEach(b=>b.classList.toggle('cat-on',b.dataset.k===c));
+ document.querySelectorAll('.item-card').forEach(el=>el.classList.toggle('hidden-x',!(c==='all'||el.dataset.cat.split(' ').includes(c))));
+ $('digital-assets').classList.toggle('hidden-x',!(c==='all'||c==='digital-assets'||c==='templates'));
+ $('enterprise').classList.toggle('hidden-x',!(c==='all'||c==='enterprise'));
+ $('articles').classList.toggle('hidden-x',!(c==='all'||c==='articles'));
+}
 
-        closeProductBtn.addEventListener('click', () => {
-            productModal.style.display = 'none';
-        });
+function showModal(html){$('modal-body').innerHTML=html;$('modal').classList.remove('hidden-x');document.body.style.overflow='hidden'}
+function closeModal(){$('modal').classList.add('hidden-x');document.body.style.overflow=''}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 
-        // Close modals when clicking outside content
-        window.addEventListener('click', (e) => {
-            if (e.target === dashboardModal) dashboardModal.style.display = 'none';
-            if (e.target === productModal) productModal.style.display = 'none';
-        });
-    </script>
-</body>
-            </html>
-            
+function openItem(id){
+ const i=ITEMS[id];if(!i)return;
+ const body=i.article?`<p class="text-gray-300 text-sm leading-relaxed mb-4">${i.free}</p>
+  <div class="p-4 rounded-xl bg-gray-900/70 border border-dashed border-gray-700 text-sm text-gray-400 mb-4"><i class="fa-solid fa-lock text-indigo-400"></i> ${i.locked}</div>`
+  :`<p class="text-gray-300 text-sm leading-relaxed mb-4">${i.desc}</p>
+  <ul class="space-y-2 mb-4 text-sm text-gray-300">${i.list.map(x=>`<li><i class="fa-solid fa-check text-emerald-400 mr-2"></i>${x}</li>`).join('')}</ul>`;
+ showModal(`<span class="text-xs mono text-indigo-400">${i.type}</span>
+ <h3 class="text-xl font-bold text-white my-2 pr-8">${i.title}</h3>${body}
+ <div class="flex items-center justify-between mb-4"><span class="text-3xl font-bold mono text-emerald-400" id="price-show">${money(i.cur,i.price)}</span>
+ <select id="cur-sel" onchange="swapCur('${id}')" style="width:auto"><option value="KES">KES (M-Pesa/Card)</option><option value="USD">USD (Card)</option></select></div>
+ <input id="buy-email" type="email" placeholder="Your email for delivery" class="mb-3">
+ <button onclick="pay('${id}')" class="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold active:scale-95"><i class="fa-solid fa-lock"></i> Unlock Now</button>
+ <p id="pay-msg" class="text-xs text-gray-400 mt-3 text-center"></p>`);
+}
+function swapCur(id){
+ const i=ITEMS[id],c=$('cur-sel').value,p=c==='USD'?Math.max(1,Math.round(i.price/130)):i.price;
+ i._c=c;i._p=p;$('price-show').textContent=money(c,p);
+}
+function openLegal(k){const[t,b]=LEGAL[k];showModal(`<h3 class="text-xl font-bold text-white mb-3">${t}</h3><div class="text-sm text-gray-300 leading-relaxed">${b}</div>`)}
+
+function pay(id){
+ const i=ITEMS[id],email=$('buy-email').value.trim(),msg=$('pay-msg'),key=store('ts_paystack');
+ if(!/^\S+@\S+\.\S+$/.test(email)){msg.textContent='Please enter a valid email.';msg.className='text-xs text-red-400 mt-3 text-center';return}
+ if(!key){msg.textContent='Checkout not configured yet: owner must add the Paystack public key in the Founder Dashboard.';msg.className='text-xs text-amber-400 mt-3 text-center';return}
+ if(typeof PaystackPop==='undefined'){msg.textContent='Payment library failed to load. Check your connection and retry.';return}
+ const cur=i._c||i.cur,price=i._p||i.price;
+ PaystackPop.setup({key,email,amount:price*100,currency:cur,ref:'TS'+Date.now(),
+  channels:cur==='KES'?['mobile_money','card']:['card'],
+  metadata:{item:i.title,id:id},
+  callback:function(r){
+   showModal('<div class="text-center py-8"><div class="text-4xl mb-3">⏳</div><p class="text-sm text-gray-300">Verifying your payment...</p></div>');
+   fetch('/api/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({reference:r.reference,i
